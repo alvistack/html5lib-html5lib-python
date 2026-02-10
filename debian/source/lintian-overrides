@@ -1,0 +1,5 @@
+python-html5lib source: file-without-copyright-information
+python-html5lib source: no-debian-changes
+python-html5lib source: source-contains-prebuilt-windows-binary
+python-html5lib source: source-is-missing
+python-html5lib source: source-package-encodes-python-version

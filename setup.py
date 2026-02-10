@@ -6,9 +6,12 @@ import sys
 
 from os.path import join, dirname
 from setuptools import setup, find_packages, __version__ as setuptools_version
-from pkg_resources import parse_version
-
-import pkg_resources
+try:
+    from pkg_resources import parse_version
+    import pkg_resources
+except ModuleNotFoundError:
+    from setuptools._vendor.packaging.version import parse as parse_version
+    pkg_resources = None
 
 try:
     import _markerlib.markers
@@ -90,8 +93,9 @@ with open(join(here, "html5lib", "__init__.py"), "rb") as init_file:
         if (len(a.targets) == 1 and
                 isinstance(a.targets[0], ast.Name) and
                 a.targets[0].id == "__version__" and
-                isinstance(a.value, ast.Str)):
-            version = a.value.s
+                ((sys.version_info >= (3, 8) and isinstance(a.value, ast.Constant)) or
+                    isinstance(a.value, ast.Str))):
+            version = a.value.value if sys.version_info >= (3, 8) else a.value.s
 
 setup(name='html5lib',
       version=version,
